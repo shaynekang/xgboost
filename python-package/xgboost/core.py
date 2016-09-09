@@ -647,6 +647,8 @@ class Booster(object):
         dmats = c_array(ctypes.c_void_p, [d.handle for d in cache])
         self.handle = ctypes.c_void_p()
         _check_call(_LIB.XGBoosterCreate(dmats, len(cache), ctypes.byref(self.handle)))
+        params["booster"] = params["booster_type"]
+        del params["booster_type"]
         self.set_param({'seed': 0})
         self.set_param(params or {})
         if model_file is not None:

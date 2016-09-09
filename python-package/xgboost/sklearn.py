@@ -112,7 +112,7 @@ class XGBModel(XGBModelBase):
     """
 
     def __init__(self, max_depth=3, learning_rate=0.1, n_estimators=100,
-                 silent=True, objective="reg:linear",
+                 silent=True, booster_type="gbtree", objective="reg:linear",
                  nthread=-1, gamma=0, min_child_weight=1, max_delta_step=0,
                  subsample=1, colsample_bytree=1, colsample_bylevel=1,
                  reg_alpha=0, reg_lambda=1, scale_pos_weight=1,
@@ -123,6 +123,7 @@ class XGBModel(XGBModelBase):
         self.learning_rate = learning_rate
         self.n_estimators = n_estimators
         self.silent = silent
+        self.booster_type = booster_type
         self.objective = objective
 
         self.nthread = nthread
@@ -337,13 +338,14 @@ class XGBClassifier(XGBModel, XGBClassifierBase):
 
     def __init__(self, max_depth=3, learning_rate=0.1,
                  n_estimators=100, silent=True,
+                 booster_type='gbtree',
                  objective="binary:logistic",
                  nthread=-1, gamma=0, min_child_weight=1,
                  max_delta_step=0, subsample=1, colsample_bytree=1, colsample_bylevel=1,
                  reg_alpha=0, reg_lambda=1, scale_pos_weight=1,
                  base_score=0.5, seed=0, missing=None):
         super(XGBClassifier, self).__init__(max_depth, learning_rate,
-                                            n_estimators, silent, objective,
+                                            n_estimators, silent, booster_type, objective,
                                             nthread, gamma, min_child_weight,
                                             max_delta_step, subsample,
                                             colsample_bytree, colsample_bylevel,

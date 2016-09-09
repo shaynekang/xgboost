@@ -298,3 +298,25 @@ def test_split_value_histograms():
     assert gbdt.get_split_value_histogram("f28", bins=2).shape[0] == 2
     assert gbdt.get_split_value_histogram("f28", bins=5).shape[0] == 2
     assert gbdt.get_split_value_histogram("f28", bins=None).shape[0] == 2
+
+
+def test_gblinear():
+    tm._skip_if_no_sklearn()
+    from sklearn.datasets import load_digits
+    from sklearn.cross_validation import KFold
+
+    digits = load_digits(2)
+    y = digits['target']
+    X = digits['data']
+
+    kf = KFold(y.shape[0], n_folds=2, shuffle=True, random_state=rng)
+
+    for train_index, test_index in kf:
+        model = xgb.XGBClassifier(booster_type='gblinear')
+        model.fit(X[train_index], y[train_index])
+        preds = model.predict(X[test_index])
+        labels = y[test_index]
+        err = sum(1 for i in range(len(preds))
+                  if int(preds[i] > 0.5) != labels[i]) / float(len(preds))
+        assert err < 0.1
+        print(err)
